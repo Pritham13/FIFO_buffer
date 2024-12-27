@@ -1,6 +1,3 @@
-`timescale 1ns / 1ps
-//`include "fifo_2.v"
-
 module fifo_tb;
 
   // Inputs
