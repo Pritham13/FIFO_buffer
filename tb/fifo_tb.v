@@ -4,7 +4,7 @@ module fifo_tb;
   reg [7:0] data_in;
   reg en_read, reset, clk, en_write;
   integer i = 0;
-  wire underflow, overflow;
+  wire empty, full;
 
   // Outputs
   wire [7:0] data_out;
@@ -17,8 +17,8 @@ module fifo_tb;
     .clk(clk),
     .en_write(en_write),
     .data_out(data_out),
-    .underflow(underflow),
-    .overflow(overflow)
+    .empty(empty),
+    .full(full)
   );
 
   // Clock generation
@@ -26,7 +26,7 @@ module fifo_tb;
 
   // Initial block for test scenarios
   initial begin
-    $dumpfile("fifo.vcd");
+    $dumpfile("dump.vcd");
     $dumpvars(0, fifo_tb);
   end
 
