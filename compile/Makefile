@@ -27,7 +27,8 @@ EXTRA_ARGS += --timing \
               --error-limit 100 \
               --cc \
               --exe \
-              --main 
+              --main \
+							-sv
 
 # Warning suppression
 WARNING_ARGS += -Wno-lint \
@@ -57,5 +58,6 @@ clean:
 	rm -rf obj_dir 
 	rm -rf *.log
 	rm -rf *.vcd
-
-.PHONY: simulate clean
+	rm -rf *.out
+wave :
+	gtkwave dump.vcd
