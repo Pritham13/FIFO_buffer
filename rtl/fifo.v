@@ -42,9 +42,11 @@ module fifo #(
                 register[ptr_wr] <= data_in;
                 ptr_wr <= ptr_wr - 1;
             end
-           // Reads data from the  
+           // Reads data 
             if (en_read && !en_write && !empty) begin
+							// outputs data from the topmost register
 								data_out <= register[DEPTH-1];
+								// shifts all the data from each registers one index above
 								for (i = DEPTH-1; i > 0; i = i - count) begin
 										register[i] <= register[i-count];
 								end
