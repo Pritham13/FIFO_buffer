@@ -15,43 +15,42 @@ module fifo #(
     reg [$clog2(DEPTH)-1:0] ptr_wr;
     integer i;
     localparam count = 1;
-		assign full = (ptr_wr == 0 );
-		assign empty = (ptr_wr == (DEPTH-1));
-    
+    assign full  = (ptr_wr == 0);
+    assign empty = (ptr_wr == (DEPTH - 1));
+
     always @(posedge clk) begin
         if (reset) begin
-					// cycles through all the registers and initialises them
+            // cycles through all the registers and initialises them
             for (i = 0; i < DEPTH; i = i + count) begin
                 register[i] <= 0;
             end
             data_out <= 0;
-            ptr_wr <= DEPTH-1;
-        end 
-				else begin
-					// simultaneous read and write operation 
-						if(en_read && en_write) begin
-								data_out <= register[DEPTH-1];
-								for (i = DEPTH-1; i > 0; i = i - count) begin
-										register[i] <= register[i-count];
-								end
+            ptr_wr   <= DEPTH - 1;
+        end else begin
+            // simultaneous read and write operation
+            if (en_read && en_write) begin
+                data_out <= register[DEPTH-1];
+                for (i = DEPTH - 1; i > 0; i = i - count) begin
+                    register[i] <= register[i-count];
+                end
                 register[ptr_wr] <= data_in;
-							
-						end
-					// writes data into the pointer if write_en is HIGH
+
+            end
+            // writes data into the pointer if write_en is HIGH
             if (en_write && ~en_read && !full) begin
                 register[ptr_wr] <= data_in;
                 ptr_wr <= ptr_wr - 1;
             end
-           // Reads data 
+            // Reads data
             if (en_read && !en_write && !empty) begin
-							// outputs data from the topmost register
-								data_out <= register[DEPTH-1];
-								// shifts all the data from each registers one index above
-								for (i = DEPTH-1; i > 0; i = i - count) begin
-										register[i] <= register[i-count];
-								end
-								ptr_wr <= ptr_wr + 1;
-            end 
+                // outputs data from the topmost register
+                data_out <= register[DEPTH-1];
+                // shifts all the data from each registers one index above
+                for (i = DEPTH - 1; i > 0; i = i - count) begin
+                    register[i] <= register[i-count];
+                end
+                ptr_wr <= ptr_wr + 1;
+            end
         end
     end
 endmodule
